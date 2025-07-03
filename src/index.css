@@ -1,0 +1,21 @@
+.success-message{
+    background-color: #c7c5c5;
+    border: 5px solid rgba(0, 128, 0, 0.819);
+    border-radius: 7px;
+    padding: 12px;
+    color: green;
+    font-weight: bold;
+    font-size: large;
+    margin-top: 10px;
+}
+
+.error-message {
+  background-color: #c7c5c5;
+  border: 5px solid #fc0019;
+  border-radius: 7px;
+  padding: 12px;
+  color: red;
+  font-weight: bold;
+  font-size: large;
+  margin-top: 10px;
+}
