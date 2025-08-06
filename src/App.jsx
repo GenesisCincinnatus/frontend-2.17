@@ -83,30 +83,37 @@ const App = () => {
 
   return (
     <div>
-      <h2>Agenda Telefónica</h2>
-      <Notification message={notification.message} type={notification.type} />
+      <h2>Phonebook</h2>
+      <Notification message={successMessage || errorMessage} type={successMessage ? 'success' : 'error'} />
 
-      <form onSubmit={handleAddPerson}>
+      <div>
+        Filter shown with:
+        <input value={filter} onChange={handleFilterChange} />
+      </div>
+
+      <h3>Add a new</h3>
+      <form onSubmit={addPerson}>
         <div>
-          Nombre: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
+          Name: <input value={newName} onChange={handleNameChange} />
         </div>
         <div>
-          Número: <input value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
+          Number: <input value={newNumber} onChange={handleNumberChange} />
         </div>
         <div>
-          <button type="submit">Agregar</button>
+          <button type="submit">add</button>
         </div>
       </form>
 
-      <h3>Contactos</h3>
-      <ul>
-        {persons.map(person =>
-          <li key={person.id}>
-            {person.name} - {person.number}
-            <button onClick={() => handleDelete(person.id)}>Eliminar</button>
-          </li>
+      <h3>Numbers</h3>
+      <div>
+        {filteredPersons.map(person =>
+        <div key={person.id}>
+          {person.name} {person.number}
+          <button onClick={() => handleDelete(person.id, person.name)}>delete</button>
+          </div>
         )}
-      </ul>
+
+        </div>
     </div>
   )
 }
