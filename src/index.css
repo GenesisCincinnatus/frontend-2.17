@@ -1,21 +1,19 @@
-.success-message{
-    background-color: #c7c5c5;
-    border: 5px solid rgba(0, 128, 0, 0.819);
-    border-radius: 7px;
-    padding: 12px;
-    color: green;
-    font-weight: bold;
-    font-size: large;
-    margin-top: 10px;
+.notification {
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.success-message {
+  color: green;
+  background-color: #f0fff0;
+  border: 2px solid green;
 }
 
 .error-message {
-  background-color: #c7c5c5;
-  border: 5px solid #fc0019;
-  border-radius: 7px;
-  padding: 12px;
   color: red;
-  font-weight: bold;
-  font-size: large;
-  margin-top: 10px;
+  background-color: #fff0f0;
+  border: 2px solid red;
 }

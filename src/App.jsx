@@ -4,12 +4,14 @@ import personService from './services/persons'
 const Notification = ({ message, type }) => {
   if (!message) return null
 
-  return (
-    <div className={type === 'error' ? 'error-message' : 'notification'}>
-      {message}
-    </div>
-  )
+  const className =
+    type === 'error'
+      ? 'notification error-message'
+      : 'notification success-message'
+
+  return <div className={className}>{message}</div>
 }
+
 
 const App = () => {
   const [persons, setPersons] = useState([])
