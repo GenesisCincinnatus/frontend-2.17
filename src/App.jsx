@@ -34,15 +34,15 @@ const App = () => {
     const newPerson = { name: newName, number: newNumber }
 
     if (existingPerson) {
-      if (window.confirm(`${newName} ya está en la agenda. ¿Deseas actualizar el número?`)) {
+      if (window.confirm(`${newName} is already in the phonebook. Do you want to update the number?`)) {
         personService
           .update(existingPerson.id, newPerson)
           .then(updated => {
             setPersons(persons.map(p => p.id !== updated.id ? p : updated))
-            showNotification(`Número de ${updated.name} actualizado`, 'success')
+            showNotification(`${updated.name}'s number updated`, 'success')
           })
           .catch(error => {
-            showNotification(error.response.data.error || 'Error al actualizar', 'error')
+            showNotification(error.response.data.error || 'Error updating number', 'error')
           })
       }
     } else {
@@ -50,10 +50,10 @@ const App = () => {
         .create(newPerson)
         .then(created => {
           setPersons(persons.concat(created))
-          showNotification(`Se añadió a ${created.name}`, 'success')
+          showNotification(`Added ${created.name}`, 'success')
         })
         .catch(error => {
-          showNotification(error.response.data.error || 'Error al añadir', 'error')
+          showNotification(error.response.data.error || 'Error adding person', 'error')
         })
     }
 
@@ -63,14 +63,14 @@ const App = () => {
 
   const handleDelete = (id) => {
     const person = persons.find(p => p.id === id)
-    if (person && window.confirm(`¿Eliminar a ${person.name}?`)) {
+    if (person && window.confirm(`Delete ${person.name}?`)) {
       personService.remove(id)
         .then(() => {
           setPersons(persons.filter(p => p.id !== id))
-          showNotification(`Se eliminó a ${person.name}`, 'success')
+          showNotification(`${person.name} was deleted`, 'success')
         })
         .catch(() => {
-          showNotification(`Ya se había eliminado a ${person.name}`, 'error')
+          showNotification(`${person.name} was already removed`, 'error')
           setPersons(persons.filter(p => p.id !== id))
         })
     }
@@ -84,36 +84,29 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successMessage || errorMessage} type={successMessage ? 'success' : 'error'} />
+      <Notification message={notification.message} type={notification.type} />
 
-      <div>
-        Filter shown with:
-        <input value={filter} onChange={handleFilterChange} />
-      </div>
-
-      <h3>Add a new</h3>
-      <form onSubmit={addPerson}>
+      <form onSubmit={handleAddPerson}>
         <div>
-          Name: <input value={newName} onChange={handleNameChange} />
+          Name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
         </div>
         <div>
-          Number: <input value={newNumber} onChange={handleNumberChange} />
+          Number: <input value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
         </div>
         <div>
-          <button type="submit">add</button>
+          <button type="submit">Add</button>
         </div>
       </form>
 
       <h3>Numbers</h3>
-      <div>
-        {filteredPersons.map(person =>
-        <div key={person.id}>
-          {person.name} {person.number}
-          <button onClick={() => handleDelete(person.id, person.name)}>delete</button>
-          </div>
+      <ul>
+        {persons.map(person =>
+          <li key={person.id}>
+            {person.name} - {person.number}
+            <button onClick={() => handleDelete(person.id)}>Delete</button>
+          </li>
         )}
-
-        </div>
+      </ul>
     </div>
   )
 }
