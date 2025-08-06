@@ -34,15 +34,15 @@ const App = () => {
     const newPerson = { name: newName, number: newNumber }
 
     if (existingPerson) {
-      if (window.confirm(`${newName} is already in the phonebook. Do you want to update the number?`)) {
+      if (window.confirm(`${newName} is already added to the phonebook. Replace the old number with a new one?`)) {
         personService
           .update(existingPerson.id, newPerson)
           .then(updated => {
             setPersons(persons.map(p => p.id !== updated.id ? p : updated))
-            showNotification(`${updated.name}'s number updated`, 'success')
+            showNotification(`${updated.name}'s number was updated`, 'success')
           })
           .catch(error => {
-            showNotification(error.response.data.error || 'Error updating number', 'error')
+            showNotification(error.response.data.error || 'Failed to update number', 'error')
           })
       }
     } else {
@@ -53,7 +53,7 @@ const App = () => {
           showNotification(`Added ${created.name}`, 'success')
         })
         .catch(error => {
-          showNotification(error.response.data.error || 'Error adding person', 'error')
+          showNotification(error.response.data.error || 'Failed to add person', 'error')
         })
     }
 
@@ -67,10 +67,10 @@ const App = () => {
       personService.remove(id)
         .then(() => {
           setPersons(persons.filter(p => p.id !== id))
-          showNotification(`${person.name} was deleted`, 'success')
+          showNotification(`Deleted ${person.name}`, 'success')
         })
         .catch(() => {
-          showNotification(`${person.name} was already removed`, 'error')
+          showNotification(`${person.name} was already deleted from server`, 'error')
           setPersons(persons.filter(p => p.id !== id))
         })
     }
@@ -88,25 +88,25 @@ const App = () => {
 
       <form onSubmit={handleAddPerson}>
         <div>
-          Name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
+          name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
         </div>
         <div>
-          Number: <input value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
+          number: <input value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
         </div>
         <div>
-          <button type="submit">Add</button>
+          <button type="submit">add</button>
         </div>
       </form>
 
       <h3>Numbers</h3>
-      <ul>
+      <div>
         {persons.map(person =>
-          <li key={person.id}>
-            {person.name} - {person.number}
-            <button onClick={() => handleDelete(person.id)}>Delete</button>
-          </li>
+          <div key={person.id}>
+            {person.name} {person.number}
+            <button onClick={() => handleDelete(person.id)}>delete</button>
+          </div>
         )}
-      </ul>
+      </div>
     </div>
   )
 }
