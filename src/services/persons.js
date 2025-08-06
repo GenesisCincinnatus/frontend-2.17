@@ -19,4 +19,3 @@ const update = (id, updatedPerson) => {
 }
 
 export default { getAll, create, update, remove }
-
