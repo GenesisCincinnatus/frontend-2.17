@@ -12,6 +12,27 @@ const Notification = ({ message, type }) => {
   return <div className={className}>{message}</div>
 }
 
+const isValidPhoneNumber = (number) => {
+
+  if (!/^\d{2,3}-\d{5,}$/.test(number)) return false
+
+  const [area, rest] = number.split('-')
+  const combined = area + rest
+
+  if (/^0+$/.test(combined)) return false
+
+  if (/^(\d)\1+$/.test(combined)) return false
+
+  if ((number.match(/-/g) || []).length !== 1) return false
+
+  for (const len of [2, 3]) {
+    const pattern = combined.slice(0, len)
+    const repeated = pattern.repeat(Math.ceil(combined.length / len)).slice(0, combined.length)
+    if (repeated === combined) return false
+  }
+
+  return true
+}
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -23,8 +44,18 @@ const App = () => {
     personService.getAll().then(initialPersons => setPersons(initialPersons))
   }, [])
 
+  const showNotification = (message, type) => {
+    setNotification({ message, type })
+    setTimeout(() => setNotification({ message: null, type: null }), 4000)
+  }
+
   const handleAddPerson = (event) => {
     event.preventDefault()
+
+    if (!isValidPhoneNumber(newNumber)) {
+      showNotification('Invalid phone number format', 'error')
+      return
+    }
 
     const existingPerson = persons.find(p => p.name === newName)
     const newPerson = { name: newName, number: newNumber }
@@ -70,11 +101,6 @@ const App = () => {
           setPersons(persons.filter(p => p.id !== id))
         })
     }
-  }
-
-  const showNotification = (message, type) => {
-    setNotification({ message, type })
-    setTimeout(() => setNotification({ message: null, type: null }), 4000)
   }
 
   return (
